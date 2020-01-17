@@ -90,4 +90,4 @@ pipelines:
             - name: ranjithr_github
         execution:
           onExecute:
-            - curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit  
+            - 'curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit'  
