@@ -86,6 +86,8 @@ pipelines:
             something: $run_number
           inputSteps:
             - name: step_5
+          integrations:
+            - name: ranjithr_github
         execution:
           onExecute:
-            - echo $something  
+            - curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit  
