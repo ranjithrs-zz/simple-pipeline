@@ -73,36 +73,18 @@ pipelines:
         type: Bash
         configuration:
           inputSteps:
-            - name: step_2
-        execution:
-          onExecute:
-            - echo "step 5"
-      - name: step_6
-        type: Bash
-        configuration:
-          inputSteps:
-            - name: step_2
-        execution:
-          onExecute:
-            - echo "step 6"
-      - name: step_7
-        type: Bash
-        configuration:
-          inputSteps:
             - name: step_3
-            - name: step_4
-            - name: step_5
-            - name: step_6            
+            - name: step_4         
         execution:
           onExecute:
-            - echo "step 7"   
-      - name: step_8
+            - echo "step 5"   
+      - name: step_6
         type: Bash
         configuration:
           environmentVariables:
             something: $run_number
           inputSteps:
-            - name: step_7
+            - name: step_5
         execution:
           onExecute:
             - echo $something  
