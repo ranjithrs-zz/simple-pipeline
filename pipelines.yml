@@ -1,0 +1,108 @@
+resources:
+  - name: myGitRepo
+    type: GitRepo
+    configuration:
+      gitProvider: ranjithr_github
+      path: ranjithrs/carbot
+      branches:
+        include: master
+  - name: myBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: art
+      buildName: CarApp
+      buildNumber: 1          
+pipelines:  
+  - name: basic_pipeline
+    configuration:
+      environmentVariables:
+        readOnly:
+          myReadEnvVariable: "hello"  
+    steps:
+      - name: step_1
+        type: Bash
+        configuration:
+          inputResources:
+            - name: myGitRepo
+          outputResources:
+            - name: myBuildInfo             
+        execution:
+          onExecute:
+            - if [ -z $pipeline_var ]; then add_pipeline_variables pipeline_var=1; else echo $pipeline_var; fi
+            - write_output myBuildInfo "buildNumber=1.1"
+            - add_run_variables run_var="hello"
+      - name: step_2
+        type: Bash
+        configuration:
+          inputResources:
+            - name: myBuildInfo            
+          runtime:
+            type: image
+            image:
+              auto:
+                language: java
+                versions: ['1.0.0']
+        execution:
+          onExecute:
+            - if [[ $(($pipeline_var % 2)) -eq 0 ]]; then run_var+=" world"; else run_var+=" universe"; fi
+            - echo $run_var  
+            - echo $ res_myBuildInfo_buildNumber
+            - add_pipeline_variables pipeline_var=$((pipeline_var+1))
+
+      - name: step_3
+        type: Bash
+        configuration:
+          environmentVariables:
+            env_var1: "hello"
+          inputSteps:
+            - name: step_2
+        execution:
+          onExecute:
+            - add_run_variables step3_var="1"
+            - echo $env_var1
+
+      - name: step_4
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: step_2
+        execution:
+          onExecute:
+            - add_run_variables step4_var="1"
+      - name: step_5
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: step_2
+        execution:
+          onExecute:
+            - echo "step 5"
+      - name: step_6
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: step_2
+        execution:
+          onExecute:
+            - echo "step 6"
+      - name: step_7
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: step_3
+            - name: step_4
+            - name: step_5
+            - name: step_6            
+        execution:
+          onExecute:
+            - echo "step 7"   
+      - name: step_8
+        type: Bash
+        configuration:
+          environmentVariables:
+            something: $run_number
+          inputSteps:
+            - name: step_7
+        execution:
+          onExecute:
+            - echo $something  
