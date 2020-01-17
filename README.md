@@ -1,5 +1,4 @@
-# Simple Pipelines Example
-## JFrog Pipelines
+# Getting started with JFrog Pipelines - Example
 
 This repo contains a simple YAML definition file that demonstrates how to use JFrog Pipelines. 
 
