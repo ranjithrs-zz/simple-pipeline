@@ -1,6 +1,6 @@
 # Getting started with JFrog Pipelines - Example
 
-This repo contains a simple YAML definition file that demonstrates how to use JFrog Pipelines. 
+This repo contains a simple pipeline definition that demonstrates how to use JFrog Pipelines. 
 
 This example pipeline shows how to construct a workflow that uses 
 * Multiple [Steps](https://www.jfrog.com/confluence/display/JFROG/Pipelines+Steps) with parallel steps,
