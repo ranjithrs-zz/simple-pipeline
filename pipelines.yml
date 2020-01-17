@@ -17,7 +17,7 @@ pipelines:
     configuration:
       environmentVariables:
         readOnly:
-          myReadEnvVariable: "hello"  
+          my_env_var: "hello"  
     steps:
       - name: step_1
         type: Bash
@@ -28,7 +28,7 @@ pipelines:
             - name: myBuildInfo             
         execution:
           onExecute:
-            - if [ -z $pipeline_var ]; then add_pipeline_variables pipeline_var=1; else echo $pipeline_var; fi
+            - echo $my_env_var
             - if [ -z $app_version ]; then add_pipeline_variables app_version=1.0.0; else app_version=$(bump_semver $app_version minor); fi
             - write_output myBuildInfo "buildNumber=$app_version"
             - add_run_variables run_var="hello"
@@ -45,22 +45,19 @@ pipelines:
                 versions: ['11']
         execution:
           onExecute:
-            - if [[ $(($pipeline_var % 2)) -eq 0 ]]; then run_var+=" world"; else run_var+=" universe"; fi
             - echo $run_var  
             - echo $res_myBuildInfo_buildNumber
-            - add_pipeline_variables pipeline_var=$((pipeline_var+1))
 
       - name: step_3
         type: Bash
         configuration:
           environmentVariables:
-            env_var1: "hello"
+            step_env_var1: "hello"
           inputSteps:
             - name: step_2
         execution:
           onExecute:
-            - add_run_variables step3_var="1"
-            - echo $env_var1
+            - echo $step_env_var1
 
       - name: step_4
         type: Bash
@@ -69,25 +66,15 @@ pipelines:
             - name: step_2
         execution:
           onExecute:
-            - add_run_variables step4_var="1"
+            - echo $app_version
       - name: step_5
         type: Bash
         configuration:
           inputSteps:
             - name: step_3
-            - name: step_4         
-        execution:
-          onExecute:
-            - echo "step 5"   
-      - name: step_6
-        type: Bash
-        configuration:
-          environmentVariables:
-            something: $run_number
-          inputSteps:
-            - name: step_5
+            - name: step_4  
           integrations:
-            - name: ranjithr_github
+            - name: ranjithr_github            
         execution:
           onExecute:
-            - 'curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit'  
+            - 'curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit'
