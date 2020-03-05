@@ -74,7 +74,7 @@ pipelines:
             - name: step_3
             - name: step_4  
           integrations:
-            - name: ranjithr_github            
+            - name: my_github            
         execution:
           onExecute:
             - echo $int_my_github_token
