@@ -2,15 +2,15 @@ resources:
   - name: myGitRepo
     type: GitRepo
     configuration:
-      gitProvider: ranjithr_github
-      path: ranjithrs/carbot
+      gitProvider: my_github
+      path: ranjithrs/simple-pipeline
       branches:
         include: master
   - name: myBuildInfo
     type: BuildInfo
     configuration:
       sourceArtifactory: art
-      buildName: CarApp
+      buildName: SampleApp
       buildNumber: 1          
 pipelines:  
   - name: basic_pipeline
@@ -74,7 +74,7 @@ pipelines:
             - name: step_3
             - name: step_4  
           integrations:
-            - name: ranjithr_github            
+            - name: my_github            
         execution:
           onExecute:
-            - 'curl -H "Authorization: token ${int_ranjithr_github_token}" ${int_ranjithr_github_url}/rate_limit'
+            - 'curl -H "Authorization: token ${int_my_github_token}" ${int_my_github_url}/rate_limit'
